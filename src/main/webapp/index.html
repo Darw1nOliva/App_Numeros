@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container">
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">📊 Calcular Números</span>
+        </div>
+    </nav>
+
+    <div class="mt-5">
+        <form id="numberForm" class="row g-3">
+            <div class="col-auto">
+                <label for="inputNumber" class="visually-hidden">Número</label>
+                <input type="number" class="form-control" id="inputNumber" placeholder="Ingrese un número">
+            </div>
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-3">Agregar Número</button>
+            </div>
+        </form>
+
+        <ul id="numberList" class="list-group mt-3"></ul>
+    </div>
+    <div>
+        <form action="hello-servlet" method="post">
+        <select id="actionSelect" class="form-select mt-3" aria-label="Default select example">
+            <option selected>Que quieres Hacer con estos Numeros</option>
+            <option value="1">Encontrar el mayor de 3 números enteros.</option>
+            <option value="2">Encontrar el Menor de 3 números enteros.</option>
+            <option value="3">Encontrar el valor que más se repita de “n” cantidad de números enteros. </option>
+        </select>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+<script>const numeros = [];
+const form = document.getElementById('numberForm');
+const input = document.getElementById('inputNumber');
+const list = document.getElementById('numberList');
+
+form.addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const valor = parseFloat(input.value);
+
+    if (isNaN(valor)) {
+        alert("Por favor ingresa un número válido.");
+        return;
+    }
+
+    if (numeros.length >= 3) {
+        alert("Solo puedes ingresar hasta 3 números.");
+        return;
+    }
+
+    numeros.push(valor);
+    actualizarLista();
+    input.value = '';
+    input.focus();
+});
+
+function actualizarLista() {
+    list.innerHTML = '';
+
+    numeros.forEach((numero) => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item';
+        li.textContent = numero;
+        list.appendChild(li);
+    });
+}
+
+</script>
+
+</body>
+</html>
