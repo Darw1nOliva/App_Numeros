@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8"> <!-- META UTF-8 al principio -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Calcular Números</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <meta charset="UTF-8">
-    <title>Title</title>
 </head>
 <body>
 
@@ -28,65 +28,102 @@
 
         <ul id="numberList" class="list-group mt-3"></ul>
     </div>
+
     <div>
-        <form action="App_numeros" method="post">
-        <select id="actionSelect" class="form-select mt-3" aria-label="Default select example">
-            <option selected>Que quieres Hacer con estos Numeros</option>
-            <option value="1">Encontrar el mayor de 3 números enteros.</option>
-            <option value="2">Encontrar el Menor de 3 números enteros.</option>
-            <option value="3">Encontrar el valor que más se repita de “n” cantidad de números enteros. </option>
-        </select>
-            <br>
-            <button type="submit" class="btn btn-primary mb-3">ejecutar</button>
+        <form action="App_numeros" method="post" onsubmit="return agregarNumerosAlFormulario()">
+            <select id="actionSelect" name="actionSelect" class="form-select mt-3 mb-3" aria-label="Seleccione una acción">
+            <option value="" selected disabled>¿Qué quieres hacer con estos números?</option>
+                <option value="1">Encontrar el mayor de 3 números enteros.</option>
+                <option value="2">Encontrar el menor de 3 números enteros.</option>
+                <option value="3">Encontrar el valor que más se repite de “n” cantidad de números enteros.</option>
+            </select>
+
+            <div id="hiddenInputs"></div>
+
+            <button type="submit" class="btn btn-success mb-5">Ejecutar</button>
         </form>
-
     </div>
-    <div>
-
-
-    </div>
-
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
-<script>const numeros = [];
-const form = document.getElementById('numberForm');
-const input = document.getElementById('inputNumber');
-const list = document.getElementById('numberList');
 
-form.addEventListener('submit', function(event) {
-    event.preventDefault();
+<script
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous">
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const numeros = [];
+        const form = document.getElementById('numberForm');
+        const input = document.getElementById('inputNumber');
+        const list = document.getElementById('numberList');
 
-    const valor = parseFloat(input.value);
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
 
-    if (isNaN(valor)) {
-        alert("Por favor ingresa un número válido.");
-        return;
-    }
+            const valor = parseFloat(input.value);
 
-    if (numeros.length >= 3) {
-        alert("Solo puedes ingresar hasta 3 números.");
-        return;
-    }
+            if (isNaN(valor)) {
+                alert("Por favor ingresa un número válido.");
+                return;
+            }
 
-    numeros.push(valor);
-    actualizarLista();
-    input.value = '';
-    input.focus();
-});
+            if (numeros.length >= 3) {
+                alert("Solo puedes ingresar hasta 3 números.");
+                return;
+            }
 
-function actualizarLista() {
-    list.innerHTML = '';
+            numeros.push(valor);
+            actualizarLista();
+            input.value = '';
+            input.focus();
+        });
 
-    numeros.forEach((numero) => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item';
-        li.textContent = numero;
-        list.appendChild(li);
+        function actualizarLista() {
+            list.innerHTML = '';
+
+            numeros.forEach((numero, index) => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item d-flex justify-content-between align-items-center';
+                li.textContent = numero;
+                const btnEliminar = document.createElement('button');
+                btnEliminar.className = 'btn btn-sm btn-danger';
+                btnEliminar.textContent = 'Eliminar';
+                btnEliminar.onclick = () => {
+                    numeros.splice(index, 1);
+                    actualizarLista();
+                };
+
+                li.appendChild(btnEliminar);
+                list.appendChild(li);
+            });
+        }
+
+        window.agregarNumerosAlFormulario = function() {
+            const select = document.getElementById('actionSelect');
+            if (select.value === "") {
+                alert("Por favor selecciona una acción.");
+                return false;
+            }
+
+            if (numeros.length < 3) {
+                alert("Debes ingresar exactamente 3 números.");
+                return false;
+            }
+
+            const contenedor = document.getElementById('hiddenInputs');
+            contenedor.innerHTML = '';
+
+            numeros.forEach(num => {
+                const inputHidden = document.createElement('input');
+                inputHidden.type = 'hidden';
+                inputHidden.name = 'numeros';
+                inputHidden.value = num;
+                contenedor.appendChild(inputHidden);
+            });
+
+            return true;
+        }
     });
-}
-
 </script>
 
 </body>
