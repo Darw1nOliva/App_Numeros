@@ -35,11 +35,11 @@ public class Appnumeros extends HttpServlet {
             out.println("<p>Numero de cuenta: " + numCuenta2 + "</p>");
 
 
-            if (listaStr == null || listaStr.length == 0) {
+         /*   if (listaStr == null || listaStr.length == 0) {
                 out.println("<p>No se ingresaron números.</p>");
                 out.println("</body></html>");
                 return;
-            }
+            }   Lineas solo para Ver si llegaba a Srvl*/
 
             int[] lista = new int[listaStr.length];
             for (int i = 0; i < listaStr.length; i++) {
